@@ -4,9 +4,13 @@ import RolePermissionsViewer from '@/components/admin/permissions/RolePermission
 import UserPermissionsInspector from '@/components/admin/permissions/UserPermissionsInspector'
 import UnifiedPermissionModal, { RoleFormData, PermissionChangeSet } from '@/components/admin/permissions/UnifiedPermissionModal'
 import { Button } from '@/components/ui/button'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Plus, Edit3, Trash2, Loader2 } from 'lucide-react'
 import { toast } from 'sonner'
 import { globalEventEmitter } from '@/lib/event-emitter'
+import { PermissionHierarchy } from '@/app/admin/users/components/PermissionHierarchy'
+import { PermissionSimulator } from '@/app/admin/users/components/PermissionSimulator'
+import { ConflictResolver } from '@/app/admin/users/components/ConflictResolver'
 
 interface Role {
   id: string
