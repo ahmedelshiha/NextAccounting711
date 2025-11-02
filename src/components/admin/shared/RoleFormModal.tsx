@@ -17,6 +17,7 @@ import { Badge } from '@/components/ui/badge'
 import { toast } from 'sonner'
 import { AlertCircle, Loader2, ChevronDown, ChevronRight, Search, X } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { globalEventEmitter } from '@/lib/event-emitter'
 
 interface RoleFormData {
   name: string
