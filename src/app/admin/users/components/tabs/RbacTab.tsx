@@ -4,9 +4,13 @@ import RolePermissionsViewer from '@/components/admin/permissions/RolePermission
 import UserPermissionsInspector from '@/components/admin/permissions/UserPermissionsInspector'
 import UnifiedPermissionModal, { RoleFormData, PermissionChangeSet } from '@/components/admin/permissions/UnifiedPermissionModal'
 import { Button } from '@/components/ui/button'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Plus, Edit3, Trash2, Loader2 } from 'lucide-react'
 import { toast } from 'sonner'
 import { globalEventEmitter } from '@/lib/event-emitter'
+import { PermissionHierarchy } from '@/app/admin/users/components/PermissionHierarchy'
+import { PermissionSimulator } from '@/app/admin/users/components/PermissionSimulator'
+import { ConflictResolver } from '@/app/admin/users/components/ConflictResolver'
 
 interface Role {
   id: string
@@ -20,6 +24,7 @@ interface Role {
 export function RbacTab() {
   const [roles, setRoles] = useState<Role[]>([])
   const [loadingRoles, setLoadingRoles] = useState(true)
+  const [activeTab, setActiveTab] = useState('roles')
   const [roleModal, setRoleModal] = useState({
     isOpen: false,
     mode: 'create' as 'role-create' | 'role-edit',
@@ -145,70 +150,97 @@ export function RbacTab() {
 
   return (
     <div className="space-y-6 p-6">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Left Column: Role Management */}
-        <div className="space-y-4">
-          <div className="flex justify-between items-center">
-            <div>
-              <h3 className="text-lg font-semibold text-gray-900">Roles</h3>
-              <p className="text-sm text-gray-500 mt-1">Create and manage roles</p>
-            </div>
-            <Button onClick={() => openRoleModal()} className="gap-2">
-              <Plus className="w-4 h-4" />
-              New Role
-            </Button>
-          </div>
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+        <TabsList className="grid w-full grid-cols-4">
+          <TabsTrigger value="roles">Roles</TabsTrigger>
+          <TabsTrigger value="hierarchy">Hierarchy</TabsTrigger>
+          <TabsTrigger value="testing">Test Access</TabsTrigger>
+          <TabsTrigger value="conflicts">Conflicts</TabsTrigger>
+        </TabsList>
 
-          {loadingRoles ? (
-            <div className="flex items-center justify-center py-8">
-              <Loader2 className="h-5 w-5 animate-spin text-gray-400" />
-            </div>
-          ) : roles.length === 0 ? (
-            <div className="text-center py-8 border-2 border-dashed rounded-lg">
-              <p className="text-gray-500">No roles created yet</p>
-              <Button onClick={() => openRoleModal()} variant="ghost" className="mt-2">
-                Create your first role
-              </Button>
-            </div>
-          ) : (
-            <div className="space-y-2 max-h-[600px] overflow-y-auto">
-              {roles.map((role) => (
-                <div key={role.id} className="border rounded-lg p-4 hover:bg-gray-50 transition-colors">
-                  <div className="flex justify-between items-start">
-                    <div className="flex-1">
-                      <h4 className="font-medium text-gray-900">{role.name}</h4>
-                      <p className="text-sm text-gray-500 mt-1">{role.description}</p>
-                      <div className="mt-2 flex items-center gap-2">
-                        <span className="inline-block px-2 py-1 text-xs bg-blue-100 text-blue-700 rounded">
-                          {role.permissions?.length || 0} permissions
-                        </span>
+        {/* Roles Tab - Role Management */}
+        <TabsContent value="roles" className="space-y-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* Left Column: Role Management */}
+            <div className="space-y-4">
+              <div className="flex justify-between items-center">
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-900">Roles</h3>
+                  <p className="text-sm text-gray-500 mt-1">Create and manage roles</p>
+                </div>
+                <Button onClick={() => openRoleModal()} className="gap-2">
+                  <Plus className="w-4 h-4" />
+                  New Role
+                </Button>
+              </div>
+
+              {loadingRoles ? (
+                <div className="flex items-center justify-center py-8">
+                  <Loader2 className="h-5 w-5 animate-spin text-gray-400" />
+                </div>
+              ) : roles.length === 0 ? (
+                <div className="text-center py-8 border-2 border-dashed rounded-lg">
+                  <p className="text-gray-500">No roles created yet</p>
+                  <Button onClick={() => openRoleModal()} variant="ghost" className="mt-2">
+                    Create your first role
+                  </Button>
+                </div>
+              ) : (
+                <div className="space-y-2 max-h-[600px] overflow-y-auto">
+                  {roles.map((role) => (
+                    <div key={role.id} className="border rounded-lg p-4 hover:bg-gray-50 transition-colors">
+                      <div className="flex justify-between items-start">
+                        <div className="flex-1">
+                          <h4 className="font-medium text-gray-900">{role.name}</h4>
+                          <p className="text-sm text-gray-500 mt-1">{role.description}</p>
+                          <div className="mt-2 flex items-center gap-2">
+                            <span className="inline-block px-2 py-1 text-xs bg-blue-100 text-blue-700 rounded">
+                              {role.permissions?.length || 0} permissions
+                            </span>
+                          </div>
+                        </div>
+                        <div className="flex gap-1">
+                          <Button variant="ghost" size="sm" onClick={() => openRoleModal(role)}>
+                            <Edit3 className="w-4 h-4" />
+                          </Button>
+                          <Button variant="ghost" size="sm" onClick={() => handleDeleteRole(role.id)}>
+                            <Trash2 className="w-4 h-4 text-red-500" />
+                          </Button>
+                        </div>
                       </div>
                     </div>
-                    <div className="flex gap-1">
-                      <Button variant="ghost" size="sm" onClick={() => openRoleModal(role)}>
-                        <Edit3 className="w-4 h-4" />
-                      </Button>
-                      <Button variant="ghost" size="sm" onClick={() => handleDeleteRole(role.id)}>
-                        <Trash2 className="w-4 h-4 text-red-500" />
-                      </Button>
-                    </div>
-                  </div>
+                  ))}
                 </div>
-              ))}
+              )}
             </div>
-          )}
-        </div>
 
-        {/* Right Column: Permission Viewers */}
-        <div className="space-y-4">
-          <RolePermissionsViewer />
-        </div>
-      </div>
+            {/* Right Column: Permission Viewers */}
+            <div className="space-y-4">
+              <RolePermissionsViewer />
+            </div>
+          </div>
 
-      {/* Bottom: User Permissions Inspector */}
-      <div className="border-t pt-6">
-        <UserPermissionsInspector />
-      </div>
+          {/* Bottom: User Permissions Inspector */}
+          <div className="border-t pt-6">
+            <UserPermissionsInspector />
+          </div>
+        </TabsContent>
+
+        {/* Hierarchy Tab */}
+        <TabsContent value="hierarchy" className="space-y-4">
+          <PermissionHierarchy />
+        </TabsContent>
+
+        {/* Test Access Tab */}
+        <TabsContent value="testing" className="space-y-4">
+          <PermissionSimulator />
+        </TabsContent>
+
+        {/* Conflicts Tab */}
+        <TabsContent value="conflicts" className="space-y-4">
+          <ConflictResolver />
+        </TabsContent>
+      </Tabs>
 
       {/* Role Management Modal */}
       {roleModal.isOpen && (

@@ -19,7 +19,7 @@ import {
   SelectValue
 } from '@/components/ui/select'
 import { Button } from '@/components/ui/button'
-import { useDashboardMetrics, useDashboardRecommendations, useDashboardAnalytics } from '../../hooks/useDashboardMetrics'
+import { useDashboardMetrics, useDashboardRecommendations, useDashboardAnalytics, useFilterUsers } from '../../hooks'
 import { UserItem } from '../../contexts/UsersContextProvider'
 import { toast } from 'sonner'
 
@@ -76,23 +76,11 @@ export function ExecutiveDashboardTab({
   }
 
   // Filter users based on active filters
-  const filteredUsers = users.filter((user) => {
-    if (filters.search) {
-      const searchLower = filters.search.toLowerCase()
-      const matchesSearch =
-        user.name?.toLowerCase().includes(searchLower) ||
-        user.email?.toLowerCase().includes(searchLower) ||
-        user.id?.toLowerCase().includes(searchLower)
-      if (!matchesSearch) return false
-    }
-    if (filters.role && user.role !== filters.role) {
-      return false
-    }
-    if (filters.status) {
-      const userStatus = user.status || (user.isActive ? 'ACTIVE' : 'INACTIVE')
-      if (userStatus !== filters.status) return false
-    }
-    return true
+  const filteredUsers = useFilterUsers(users, {
+    search: filters.search,
+    role: filters.role,
+    status: filters.status,
+    department: filters.department
   })
 
   const displayMetrics: OperationsMetrics = stats || {

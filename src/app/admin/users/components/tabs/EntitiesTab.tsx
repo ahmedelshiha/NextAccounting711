@@ -13,20 +13,8 @@ import { toast } from 'sonner'
 import type { Column } from '@/types/dashboard'
 import { useListState } from '@/hooks/admin/useListState'
 import { useListFilters } from '@/hooks/admin/useListFilters'
-
-interface ClientItem {
-  id: string
-  name: string
-  email: string
-  phone?: string
-  company?: string
-  tier?: 'INDIVIDUAL' | 'SMB' | 'ENTERPRISE'
-  status?: 'ACTIVE' | 'INACTIVE' | 'SUSPENDED'
-  totalBookings?: number
-  totalRevenue?: number
-  lastBooking?: string
-  createdAt: string
-}
+import { useFilterUsers } from '../../hooks/useFilterUsers'
+import type { ClientItem } from '../../types/entities'
 
 type EntitiesSubTab = 'clients' | 'team'
 
@@ -151,13 +139,15 @@ function ClientsListEmbedded({ onEdit, onAddClick }: { onEdit: (client: ClientIt
     return () => window.removeEventListener('refresh-clients', handleRefresh)
   }, [load])
 
-  const filtered = useMemo(() => {
-    const term = search.trim().toLowerCase()
-    return rows
-      .filter((c) => (!term ? true : (c.name || '').toLowerCase().includes(term) || c.email.toLowerCase().includes(term) || (c.company || '').toLowerCase().includes(term)))
-      .filter((c) => (tier === 'all' ? true : (c.tier || '').toLowerCase() === tier))
-      .filter((c) => (status === 'all' ? true : (c.status || '').toLowerCase() === status))
-  }, [rows, search, tier, status])
+  const filtered = useFilterUsers(rows, {
+    search,
+    tier: tier === 'all' ? undefined : tier,
+    status: status === 'all' ? undefined : status
+  }, {
+    searchFields: ['name', 'email', 'company'],
+    caseInsensitive: true,
+    sortByDate: true
+  })
 
   const handleDeleteClient = useCallback(async (clientId: string) => {
     if (!confirm('Are you sure you want to delete this client?')) return
