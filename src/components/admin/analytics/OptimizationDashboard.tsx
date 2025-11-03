@@ -165,7 +165,7 @@ export function OptimizationDashboard() {
           <div className="space-y-2">
             <h4 className="font-semibold text-sm">📊 Expected Benefits</h4>
             <ul className="text-sm text-gray-600 space-y-1 ml-4">
-              <li>• 90%+ reduction in DOM nodes for lists >500 items</li>
+              <li>• 90%+ reduction in DOM nodes for lists &gt;500 items</li>
               <li>• 60fps scrolling with 1000+ items</li>
               <li>• 95%+ memory savings vs non-virtualized lists</li>
               <li>• 85%+ faster API responses with server-side filtering</li>
