@@ -74,7 +74,31 @@ export function buildServerFilterQuery(
  * Unified user filtering hook - consolidates filtering logic across all components
  * Supports both client-side and server-side filtering
  * Eliminates 40% duplication in filtering implementations
- *
+ */
+
+// Function overloads for proper TypeScript typing
+/**
+ * Client-side filtering (default mode)
+ * @returns Filtered and sorted array of users
+ */
+export function useFilterUsers(
+  users: UserItem[],
+  filters: FilterOptions,
+  config?: FilterConfig | undefined
+): UserItem[]
+
+/**
+ * Server-side filtering mode
+ * @returns URL query string for API call
+ */
+export function useFilterUsers(
+  users: UserItem[],
+  filters: FilterOptions,
+  config: FilterConfig & { serverSide: true }
+): string
+
+/**
+ * Implementation with both modes
  * @param users - Array of users to filter (for client-side filtering)
  * @param filters - Filter options (search, role, status, etc.)
  * @param config - Optional configuration for filtering behavior (serverSide flag enables server-side)
