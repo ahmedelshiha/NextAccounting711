@@ -56,13 +56,16 @@ export const WorkstationSidebar = memo(function WorkstationSidebar({
    * Map filters from WorkstationIntegrated format to AdvancedUserFilters format
    * Ensures safe extraction of all filter values with proper typing
    */
-  const mappedFilters: AUserFilters = useMemo(() => ({
-    search: getFilterValue(filters?.search) || '',
-    role: getFilterValue(filters?.role),
-    status: getFilterValue(filters?.status),
-    department: getFilterValue(filters?.department),
-    dateRange: getFilterValue(filters?.dateRange),
-  }), [filters])
+  const mappedFilters: AUserFilters = useMemo(() => {
+    const dateRangeStr = getFilterValue(filters?.dateRange)
+    return {
+      search: getFilterValue(filters?.search) || '',
+      role: getFilterValue(filters?.role),
+      status: getFilterValue(filters?.status),
+      department: getFilterValue(filters?.department),
+      dateRange: (dateRangeStr as 'all' | 'today' | 'week' | 'month' | undefined) || undefined,
+    }
+  }, [filters])
 
   return (
     <div className="workstation-sidebar-content" data-testid="workstation-sidebar">
