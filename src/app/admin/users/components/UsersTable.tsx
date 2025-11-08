@@ -21,18 +21,13 @@ interface UsersTableProps {
 
 const UserRowSkeleton = memo(function UserRowSkeleton() {
   return (
-    <div className="grid grid-cols-[40px_2fr_2fr_1fr_1fr_80px] items-center gap-4 px-4 py-3 border-b border-gray-200 bg-white animate-pulse">
+    <div className="grid grid-cols-[40px_2fr_2fr_1fr_1fr_1fr_80px] items-center gap-4 px-4 py-3 border-b border-gray-200 bg-white animate-pulse">
       <div className="w-5 h-5 bg-gray-200 rounded" />
-      <div className="space-y-2">
-        <div className="h-4 bg-gray-200 rounded w-32" />
-        <div className="h-3 bg-gray-200 rounded w-48" />
-      </div>
-      <div className="space-y-2">
-        <div className="h-3 bg-gray-200 rounded w-40" />
-        <div className="h-3 bg-gray-200 rounded w-32" />
-      </div>
+      <div className="h-4 bg-gray-200 rounded w-32" />
+      <div className="h-3 bg-gray-200 rounded w-48" />
       <div className="h-6 bg-gray-200 rounded w-16" />
       <div className="h-6 bg-gray-200 rounded w-16" />
+      <div className="h-4 bg-gray-200 rounded w-24" />
       <div className="h-8 bg-gray-200 rounded w-8" />
     </div>
   )
@@ -88,7 +83,7 @@ export const UsersTable = memo(function UsersTable({
   return (
     <div className="flex flex-col h-full bg-white border border-gray-200 rounded-lg">
       {/* Table Header */}
-      <div className="grid grid-cols-[40px_2fr_2fr_1fr_1fr_80px] items-center gap-4 px-4 py-3 border-b border-gray-200 bg-gray-50 flex-shrink-0" role="row" aria-label="Table header">
+      <div className="grid grid-cols-[40px_2fr_2fr_1fr_1fr_1fr_80px] items-center gap-4 px-4 py-3 border-b border-gray-200 bg-gray-50 flex-shrink-0" role="row" aria-label="Table header">
         <div className="flex items-center justify-center">
           <Checkbox
             checked={allSelected || someSelected}
@@ -101,6 +96,7 @@ export const UsersTable = memo(function UsersTable({
         <div className="text-sm font-semibold text-gray-600">Email</div>
         <div className="text-sm font-semibold text-gray-600">Role</div>
         <div className="text-sm font-semibold text-gray-600">Status</div>
+        <div className="text-sm font-semibold text-gray-600">Date Joined</div>
         <div className="text-sm font-semibold text-gray-600">Actions</div>
       </div>
 
