@@ -6,8 +6,11 @@ import { useFilterUsers } from './useFilterUsers'
 
 export interface FilterState {
   search: string
-  role: string | null
-  status: string | null
+  roles: string[]      // Multi-select: array of roles
+  statuses: string[]   // Multi-select: array of statuses
+  // Legacy single-select support (deprecated)
+  role?: string | null
+  status?: string | null
 }
 
 export interface FilterStats {
