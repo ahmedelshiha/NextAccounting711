@@ -1,6 +1,6 @@
 'use client'
 
-import React, { memo, useCallback } from 'react'
+import React, { memo, useCallback, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Shield, Lock, LogOut, Bell, Trash2, Pause, Eye } from 'lucide-react'
@@ -16,7 +16,8 @@ import {
   AlertDialogAction,
   AlertDialogCancel
 } from '@/components/ui/alert-dialog'
-import { useState } from 'react'
+import { toast } from 'sonner'
+import { apiFetch } from '@/lib/api'
 
 interface SettingsTabProps {
   user: UserItem
