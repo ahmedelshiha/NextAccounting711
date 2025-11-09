@@ -5,6 +5,7 @@ import { respond } from '@/lib/api-response'
 import { hasPermission, PERMISSIONS } from '@/lib/permissions'
 import prisma from '@/lib/prisma'
 import { tenantFilter } from '@/lib/tenant'
+import { AvailabilityStatus } from '@prisma/client'
 
 export const runtime = 'nodejs'
 
@@ -29,14 +30,14 @@ export const GET = withTenantContext(async (request: NextRequest) => {
 
     const activeUsers = await prisma.user.count({
       where: {
-        availabilityStatus: 'AVAILABLE',
+        availabilityStatus: AvailabilityStatus.AVAILABLE,
         ...(tenantFilter(tenantId) )
       }
     })
 
     const inactiveUsers = await prisma.user.count({
       where: {
-        availabilityStatus: 'UNAVAILABLE',
+        availabilityStatus: AvailabilityStatus.UNAVAILABLE,
         ...(tenantFilter(tenantId) )
       }
     })

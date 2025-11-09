@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { TaskStatus } from '@prisma/client'
 import { hasPermission, PERMISSIONS } from '@/lib/permissions'
 import prisma from '@/lib/prisma'
 import { logger } from '@/lib/logger'
@@ -56,7 +57,7 @@ export const GET = withTenantContext(async (request: NextRequest) => {
     })
 
     const total = await prisma.task.count({ where: tenantFilter(tenantId) })
-    const completed = await prisma.task.count({ where: { ...tenantFilter(tenantId), status: 'DONE' } })
+    const completed = await prisma.task.count({ where: { ...tenantFilter(tenantId), status: TaskStatus.DONE } })
 
     const byStatus = await prisma.task.groupBy({
       by: ['status'],
@@ -114,7 +115,7 @@ export const GET = withTenantContext(async (request: NextRequest) => {
 
     const dones = await prisma.task.findMany({
       select: { updatedAt: true },
-      where: { ...tenantFilter(tenantId), updatedAt: { gte: start }, status: 'DONE' }
+      where: { ...tenantFilter(tenantId), updatedAt: { gte: start }, status: TaskStatus.DONE }
     })
 
     const dayKey = (d: Date) => d.toISOString().slice(0, 10)

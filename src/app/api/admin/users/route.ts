@@ -9,6 +9,7 @@ import { applyRateLimit, getClientIp } from '@/lib/rate-limit'
 import { tenantFilter } from '@/lib/tenant'
 import { AuditLogService } from '@/services/audit-log.service'
 import { UserCreateSchema } from '@/schemas/users'
+import { UserRole } from '@prisma/client'
 
 export const runtime = 'nodejs'
 export const revalidate = 30 // ISR: Revalidate every 30 seconds
@@ -303,7 +304,7 @@ export const POST = withTenantContext(async (request: NextRequest) => {
       data: {
         name,
         email,
-        role: userRole ,
+        role: userRole as UserRole ,
         availabilityStatus: 'AVAILABLE',
         tenantId: tenantId || 'default-tenant',
         ...(phone && { phone }),
