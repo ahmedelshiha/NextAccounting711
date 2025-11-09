@@ -117,7 +117,7 @@ export default function InlineUserProfile({ onBack }: { onBack: () => void }) {
 
         {/* Tabs (mobile secondary nav) */}
         <div className="sm:hidden border-t border-slate-200 flex overflow-x-auto">
-          {(['overview', 'details', 'activity', 'settings'] as const).map((id) => (
+          {(['overview', 'details', 'permissions', 'activity', 'settings'] as const).map((id) => (
             <button
               key={id}
               onClick={() => setActiveTab(id)}
@@ -140,6 +140,7 @@ export default function InlineUserProfile({ onBack }: { onBack: () => void }) {
               {([
                 { id: 'overview', label: 'Overview' },
                 { id: 'details', label: 'Details' },
+                { id: 'permissions', label: 'Permissions' },
                 { id: 'activity', label: 'Activity' },
                 { id: 'settings', label: 'Settings' },
               ] as const).map((item) => (
