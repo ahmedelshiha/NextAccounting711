@@ -8,10 +8,13 @@ import { UserProfileDialog } from '../UserProfileDialog'
 import DirectoryHeader from './DirectoryHeader'
 import { UserDirectoryFilterBar } from '../UserDirectoryFilterBar'
 import { UserDirectoryFilterBarEnhanced } from '../UserDirectoryFilterBarEnhanced'
+import { MobileFilterBar } from '../MobileFilterBar'
 import { useFilterState } from '../../hooks/useFilterState'
 import { useUserActions } from '../../hooks/useUserActions'
+import { useMediaQuery } from '@/hooks/useMediaQuery'
 import { deleteUser as deleteUserApi } from './api/users'
 import { toast } from 'sonner'
+import '../styles/mobile-optimizations.css'
 
 interface UsersTableWrapperProps {
   selectedUserIds?: Set<string>
