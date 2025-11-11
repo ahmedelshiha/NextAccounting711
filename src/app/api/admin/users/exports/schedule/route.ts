@@ -3,7 +3,7 @@ import prisma from '@/lib/prisma'
 import { withTenantContext } from '@/lib/api-wrapper'
 import { tenantContext } from '@/lib/tenant-context'
 import { hasPermission, PERMISSIONS } from '@/lib/permissions'
-import { rateLimit } from '@/lib/rate-limit'
+import { rateLimitAsync } from '@/lib/rate-limit'
 
 export const GET = withTenantContext(async (request: NextRequest) => {
   try {
