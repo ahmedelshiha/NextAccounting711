@@ -12,6 +12,18 @@ import {
 } from '../types/report-builder'
 
 /**
+ * Escape HTML special characters
+ */
+function escapeHTML(str: string): string {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;')
+}
+
+/**
  * Generate report HTML from report definition and data
  */
 export function generateReportHTML(

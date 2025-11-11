@@ -47,11 +47,6 @@ export const VirtualizedUsersList = React.memo(function VirtualizedUsersList({
     }
   }, [])
 
-  // Expose scroll methods via imperative handle if needed
-  React.useImperativeHandle(() => ({
-    scrollToItem
-  }), [scrollToItem])
-
   if (isLoading) {
     return loadingPlaceholder ?? (
       <div className="flex items-center justify-center" style={{ height }}>
@@ -68,6 +63,12 @@ export const VirtualizedUsersList = React.memo(function VirtualizedUsersList({
     )
   }
 
+  const Row = ({ index, style }: { index: number; style: React.CSSProperties }) => (
+    <div key={users[index].id} style={style}>
+      {renderItem(users[index], index, style)}
+    </div>
+  )
+
   return (
     <List
       ref={listRef}
@@ -79,11 +80,7 @@ export const VirtualizedUsersList = React.memo(function VirtualizedUsersList({
       onScroll={handleScroll}
       className={className}
     >
-      {(({ index, style }) => (
-        <div key={users[index].id} style={style}>
-          {renderItem(users[index], index, style)}
-        </div>
-      )) as React.ReactNode}
+      {Row}
     </List>
   )
 })

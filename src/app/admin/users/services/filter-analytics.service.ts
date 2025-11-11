@@ -181,12 +181,11 @@ export class FilterAnalyticsService {
     try {
       // Query presets from database
       const presets = await prisma.filterPreset.findMany({
-        where: { tenantId },
-        include: { _count: { select: { User: true } } }
+        where: { tenantId }
       })
 
       const totalPresets = presets.length
-      const usedPresets = presets.filter(p => p._count.User > 0).length
+      const usedPresets = presets.filter(p => p.usageCount > 0).length
       const adoptionRate = totalPresets > 0 ? (usedPresets / totalPresets) * 100 : 0
 
       // Calculate average usage (from usageCount field if available)
