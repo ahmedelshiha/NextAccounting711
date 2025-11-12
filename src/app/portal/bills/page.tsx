@@ -34,7 +34,7 @@ export default function BillsPage() {
         <Alert>
           <AlertCircle className="h-4 w-4" />
           <AlertDescription>
-            The Upload Bill feature is coming soon. You'll be able to scan receipts and extract data automatically.
+            The Upload Bill feature is coming soon. You&apos;ll be able to scan receipts and extract data automatically.
           </AlertDescription>
         </Alert>
 

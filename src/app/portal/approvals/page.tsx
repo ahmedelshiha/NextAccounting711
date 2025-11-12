@@ -34,7 +34,7 @@ export default function ApprovalsPage() {
         <Alert>
           <AlertCircle className="h-4 w-4" />
           <AlertDescription>
-            The Approvals feature is coming soon. You'll see all items pending your approval here.
+            The Approvals feature is coming soon. You&apos;ll see all items pending your approval here.
           </AlertDescription>
         </Alert>
 
