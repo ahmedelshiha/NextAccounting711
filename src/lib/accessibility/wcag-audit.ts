@@ -342,6 +342,7 @@ export function checkRTLAccessibility(
       impact: 'Screen readers may not correctly announce text direction',
       remediation: 'Add dir="rtl" to html element for Arabic/Hebrew/Urdu content',
       detectedAt: new Date(),
+      resolved: false,
     })
   }
 
@@ -357,6 +358,7 @@ export function checkRTLAccessibility(
       impact: 'May cause unexpected behavior in screen readers',
       remediation: 'Use CSS text-align and direction properties instead of Unicode marks',
       detectedAt: new Date(),
+      resolved: false,
     })
   }
 
